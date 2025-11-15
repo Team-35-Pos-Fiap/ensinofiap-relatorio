@@ -47,16 +47,12 @@ public class RelatorioService implements IRelatorioService {
 	}
 
 	private void enviarEmail(List<Resumo> resumos) {
-		resumos.stream().forEach(r -> System.out.println("Dados das avaliações: " + r.toString()));
-
 		emailService.enviarEmail(resumos, buscarEmailsDestinatarios());
 	}
 	
 	private List<String> buscarEmailsDestinatarios() {
 		List<UsuarioDB> usuarios = usuarioService.buscarAdministradores();
 		
-		usuarios.stream().forEach(r -> System.out.println("Dados dos usuários: " + r.toString()));
-
 		return usuarios.stream().map(u -> u.getEmail()).collect(Collectors.toList());
 	}
 }
