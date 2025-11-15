@@ -1,5 +1,6 @@
 package br.com.relatorio.entities.db;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,10 +17,9 @@ import lombok.Setter;
 @Table(name = "perfil")
 @Getter
 @Setter
-public class PerfilDB {
+public class PerfilDB extends PanacheEntityBase {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	private String nome;

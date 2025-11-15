@@ -2,6 +2,7 @@ package br.com.relatorio.entities.db;
 
 import java.util.UUID;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,9 +19,9 @@ import lombok.Setter;
 @Table(name = "curso")
 @Getter
 @Setter
-public class CursoDB {
+public class CursoDB extends PanacheEntityBase {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
+    
 	private String nome;
 }

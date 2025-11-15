@@ -1,34 +1,50 @@
 package br.com.relatorio.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import br.com.relatorio.entities.ResumoAvaliacao;
+import br.com.relatorio.entities.Resumo;
 import br.com.relatorio.services.interfaces.IEmailService;
 import br.com.relatorio.services.interfaces.IEnvioEmailService;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+@RequestScoped
 public class EmailService implements IEmailService {
 
 	@Inject
 	private IEnvioEmailService envioEmailService;
 	
 	private final String REMETENTE = "DoNotReply@5acd0ae5-f401-4bb4-b1ad-b49425ca624f.azurecomm.net";
-	private final String MENSAGEM = "Olá administradores.\r\nSegue relatório semanal das avaliações.\r\n";
-	private final String RESUMO = "Curso: %s - Média: %s - Total de avaliações: %s. \r\n";
 	private final String ASSUNTO = "Relatório semanal de avaliações";	
+	private String resumo = "Curso: %s. Quantidade total de avaliações: %d. Média das avaliações: %.2f. \r\n";
+	private String mensagem = """ 
+		<html>
+			<body>
+				<p>Olá administradores,</p>
+				<p>Segue relatório semanal das avaliações.</p>
+				<br/>
+				%s	
+			</body>
+		</html>
+	""";
 		
 	@Override
-	public void enviarEmail(List<ResumoAvaliacao> resumos, List<String> destinatarios) {
+	public void enviarEmail(List<Resumo> resumos, List<String> destinatarios) {
 		enviarEmail(montarMensagemResumo(resumos), destinatarios);
 	}
 
-	private String montarMensagemResumo(List<ResumoAvaliacao> resumos) {
-		resumos.stream().forEach(r -> String.format(RESUMO, r.getNomeCurso(), r.getMedia(), r.getTotal()));
-		
-		return MENSAGEM + RESUMO;
+	private String montarMensagemResumo(List<Resumo> resumos) {
+		return String.format(mensagem, montaLista(resumos));
 	}
 	
 	private void enviarEmail(String mensagem, List<String> destinatarios) {
 		envioEmailService.enviar(mensagem, destinatarios, REMETENTE, ASSUNTO);
+	}
+
+	private String montaLista(List<Resumo> resumos) {
+		return resumos.stream()
+					  .map(r -> "  <li>" + String.format(resumo, r.nomeCurso(), r.total(), r.media()) + "  </li>")
+					  .collect(Collectors.joining("\n", "<ul>\n", "\n</ul>"));		
 	}
 }	

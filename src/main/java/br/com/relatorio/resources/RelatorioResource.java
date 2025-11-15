@@ -14,6 +14,8 @@ public class RelatorioResource {
     @GET
     @Path("/semanal")
     public void gerarRelatorioSemanal() {
+        System.out.println("iniciando o envio dos relatórios.");
+
     	relatorioService.gerarRelatorioSemanal();
     }
 }

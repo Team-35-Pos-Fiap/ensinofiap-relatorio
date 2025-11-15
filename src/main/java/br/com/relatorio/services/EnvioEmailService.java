@@ -9,7 +9,9 @@ import com.azure.communication.email.models.EmailAddress;
 import com.azure.communication.email.models.EmailMessage;
 
 import br.com.relatorio.services.interfaces.IEnvioEmailService;
+import jakarta.enterprise.context.RequestScoped;
 
+@RequestScoped
 public class EnvioEmailService implements IEnvioEmailService {
 
 	private String connectionString = "endpoint=https://cms-ensino.brazil.communication.azure.com/;accesskey=FeH4iXIV2wZEQbrGSoaKkpLenuQCkTtcpjWATrRcFLtzF7evUaKeJQQJ99BKACULyCp9qFJVAAAAAZCS2Jpc";
@@ -22,12 +24,10 @@ public class EnvioEmailService implements IEnvioEmailService {
 	}
 	
 	private EmailMessage montarEmail(String mensagem, List<String> destinatarios, String remetente, String assunto) {
-		EmailMessage email = new EmailMessage().setSenderAddress(remetente)
-											   .setToRecipients(recuperarDestinatarios(destinatarios))
-											   .setSubject(assunto)
-											   .setBodyPlainText(mensagem);
-
-		return email;
+		return new EmailMessage().setSenderAddress(remetente)
+								 .setToRecipients(recuperarDestinatarios(destinatarios))
+								 .setSubject(assunto)
+								 .setBodyHtml(mensagem);
 	}
 	
 	private List<EmailAddress> recuperarDestinatarios(List<String> destinatarios) {

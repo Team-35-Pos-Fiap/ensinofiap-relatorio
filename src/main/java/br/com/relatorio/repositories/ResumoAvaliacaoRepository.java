@@ -3,26 +3,21 @@ package br.com.relatorio.repositories;
 import java.time.LocalDate;
 import java.util.List;
 
-import br.com.relatorio.entities.ResumoAvaliacao;
+import br.com.relatorio.entities.Resumo;
+import br.com.relatorio.entities.db.AvaliacaoDB;
 import br.com.relatorio.repositories.interfaces.IResumoAvaliacaoDbRepository;
 import br.com.relatorio.repositories.interfaces.IResumoAvaliacaoRepository;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
-@ApplicationScoped
+@RequestScoped
 public class ResumoAvaliacaoRepository implements IResumoAvaliacaoRepository{
 
-	@Inject
-	private IResumoAvaliacaoDbRepository avaliacaoDbRepository;
+	//@Inject
+	//private IResumoAvaliacaoDbRepository avaliacaoDbRepository;
 	
 	@Override
-	public List<ResumoAvaliacao> buscarResumoPorPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
-		return avaliacaoDbRepository.find("select a.curso.nome, count(*) as total, avg(a.nota) as media "
-										+ "  from Avaliacao a "
-										+ " where a.dataCriacao between ?1 and ?2 "
-										+ " group by a.curso.nome "
-										+ " order by a.curso.nome", dataInicial, dataFinal)
-									.project(ResumoAvaliacao.class)
-									.list();
+	public List<Resumo> buscarResumoPorPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
+		return AvaliacaoDB.buscarResumoPorPeriodo(dataInicial, dataFinal);
 	}
 }

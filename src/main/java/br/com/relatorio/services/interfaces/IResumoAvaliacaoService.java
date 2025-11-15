@@ -3,8 +3,8 @@ package br.com.relatorio.services.interfaces;
 import java.time.LocalDate;
 import java.util.List;
 
-import br.com.relatorio.entities.ResumoAvaliacao;
+import br.com.relatorio.entities.Resumo;
 
 public interface IResumoAvaliacaoService {
-	List<ResumoAvaliacao> buscarAvaliacoesPorPeriodo(LocalDate dataInicial, LocalDate dataFinal);
+	List<Resumo> buscarAvaliacoesPorPeriodo(LocalDate dataInicial, LocalDate dataFinal);
 }
