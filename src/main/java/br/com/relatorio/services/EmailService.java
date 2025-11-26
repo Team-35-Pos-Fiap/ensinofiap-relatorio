@@ -1,9 +1,5 @@
 package br.com.relatorio.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import br.com.relatorio.entities.Resumo;
 import br.com.relatorio.services.interfaces.IEmailService;
 import br.com.relatorio.services.interfaces.IEnvioEmailService;
 import jakarta.enterprise.context.RequestScoped;
@@ -15,12 +11,13 @@ public class EmailService implements IEmailService {
 	@Inject
 	private IEnvioEmailService envioEmailService;
 	
-	private final String REMETENTE = "DoNotReply@5acd0ae5-f401-4bb4-b1ad-b49425ca624f.azurecomm.net";
-	private final String ASSUNTO_RESUMO_AVALIACOES = "Relatório semanal com o resumo das avaliações.";
-	private final String ASSUNTO_COMENTARIOS_FREQUENTES_AVALIACOES = "Relatório semanal com os comentários frequentes das avaliações.";	
 
-	private String resumo = "Curso: %s. Quantidade total de avaliações: %d. Média das avaliações: %.2f. \r\n";
-	private String mensagemResumoAvaliacoes = 
+	
+	//private final String ASSUNTO_RESUMO_AVALIACOES = "Relatório semanal com o resumo das avaliações.";
+	//private final String ASSUNTO_COMENTARIOS_FREQUENTES_AVALIACOES = "Relatório semanal com os comentários frequentes das avaliações.";	
+
+	//private String resumo = "Curso: %s. Quantidade total de avaliações: %d. Média das avaliações: %.2f. \r\n";
+	/*private String mensagemResumoAvaliacoes = 
 	""" 
 		<html>
 			<body>
@@ -41,11 +38,11 @@ public class EmailService implements IEmailService {
 				%s	
 			</body>
 		</html>
-	""";
+	""";*/
 		
-	@Override
+	/*@Override
 	public void enviarEmailResumoAvaliacoes(List<Resumo> resumos, List<String> destinatarios) {
-		enviarEmail(montarMensagemResumo(resumos), destinatarios, ASSUNTO_RESUMO_AVALIACOES);
+		enviarEmail(montarMensagemResumo(resumos), buscarEmailsDestinatarios(), ASSUNTO_RESUMO_AVALIACOES);
 	}
 
 	@Override
@@ -60,10 +57,6 @@ public class EmailService implements IEmailService {
 	private String montarMensagemComentariosFrequentes(List<String> comentarios) {
 		return String.format(mensagemComentariosFrequentesAvaliacoes, montaListaComentariosFrequentesAvaliacoes(comentarios));
 	}
-	
-	private void enviarEmail(String mensagem, List<String> destinatarios, String assunto) {
-		envioEmailService.enviar(mensagem, destinatarios, REMETENTE, assunto);
-	}
 
 	private String montaListaResumos(List<Resumo> resumos) {
 		return resumos.stream()
@@ -73,5 +66,11 @@ public class EmailService implements IEmailService {
 
 	private String montaListaComentariosFrequentesAvaliacoes(List<String> comentarios) {
 		return comentarios.stream().collect(Collectors.joining("\n"));	
+	}
+	*/
+
+	@Override
+	public void enviarEmail(String mensagem, String assunto) {
+		envioEmailService.enviar(mensagem, assunto);
 	}
 }	
