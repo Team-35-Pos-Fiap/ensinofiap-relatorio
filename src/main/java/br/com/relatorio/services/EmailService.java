@@ -16,9 +16,12 @@ public class EmailService implements IEmailService {
 	private IEnvioEmailService envioEmailService;
 	
 	private final String REMETENTE = "DoNotReply@5acd0ae5-f401-4bb4-b1ad-b49425ca624f.azurecomm.net";
-	private final String ASSUNTO = "Relatório semanal de avaliações";	
+	private final String ASSUNTO_RESUMO_AVALIACOES = "Relatório semanal com o resumo das avaliações.";
+	private final String ASSUNTO_COMENTARIOS_FREQUENTES_AVALIACOES = "Relatório semanal com os comentários frequentes das avaliações.";	
+
 	private String resumo = "Curso: %s. Quantidade total de avaliações: %d. Média das avaliações: %.2f. \r\n";
-	private String mensagem = """ 
+	private String mensagemResumoAvaliacoes = 
+	""" 
 		<html>
 			<body>
 				<p>Olá administradores,</p>
@@ -28,23 +31,47 @@ public class EmailService implements IEmailService {
 			</body>
 		</html>
 	""";
+	private String mensagemComentariosFrequentesAvaliacoes = 
+	""" 
+		<html>
+			<body>
+				<p>Olá administradores,</p>
+				<p>Segue relatório com os comentários frequentes dos cursos.</p>
+				<br/>
+				%s	
+			</body>
+		</html>
+	""";
 		
 	@Override
-	public void enviarEmail(List<Resumo> resumos, List<String> destinatarios) {
-		enviarEmail(montarMensagemResumo(resumos), destinatarios);
+	public void enviarEmailResumoAvaliacoes(List<Resumo> resumos, List<String> destinatarios) {
+		enviarEmail(montarMensagemResumo(resumos), destinatarios, ASSUNTO_RESUMO_AVALIACOES);
+	}
+
+	@Override
+	public void enviarEmailComentariosFrequentesAvaliacoes(List<String> comentarios, List<String> destinatarios) {
+		enviarEmail(montarMensagemComentariosFrequentes(comentarios), destinatarios, ASSUNTO_COMENTARIOS_FREQUENTES_AVALIACOES);
 	}
 
 	private String montarMensagemResumo(List<Resumo> resumos) {
-		return String.format(mensagem, montaLista(resumos));
-	}
-	
-	private void enviarEmail(String mensagem, List<String> destinatarios) {
-		envioEmailService.enviar(mensagem, destinatarios, REMETENTE, ASSUNTO);
+		return String.format(mensagemResumoAvaliacoes, montaListaResumos(resumos));
 	}
 
-	private String montaLista(List<Resumo> resumos) {
+	private String montarMensagemComentariosFrequentes(List<String> comentarios) {
+		return String.format(mensagemComentariosFrequentesAvaliacoes, montaListaComentariosFrequentesAvaliacoes(comentarios));
+	}
+	
+	private void enviarEmail(String mensagem, List<String> destinatarios, String assunto) {
+		envioEmailService.enviar(mensagem, destinatarios, REMETENTE, assunto);
+	}
+
+	private String montaListaResumos(List<Resumo> resumos) {
 		return resumos.stream()
 					  .map(r -> "  <li>" + String.format(resumo, r.nomeCurso(), r.total(), r.media()) + "  </li>")
 					  .collect(Collectors.joining("\n", "<ul>\n", "\n</ul>"));		
+	}
+
+	private String montaListaComentariosFrequentesAvaliacoes(List<String> comentarios) {
+		return comentarios.stream().collect(Collectors.joining("\n"));	
 	}
 }	

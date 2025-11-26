@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Table(name = "avaliacao")
 @Getter
 @Setter
+@ToString
 public class AvaliacaoDB extends PanacheEntityBase{
 	@Id
 	private UUID id;
@@ -53,5 +55,20 @@ public class AvaliacaoDB extends PanacheEntityBase{
 				  + " order by a.curso.nome", dataInicial, dataFinal)
 				.project(Resumo.class)
 				.list();
+	}
+
+	public static List<String> buscarAvaliacoesFrequentesPorCurso(LocalDate dataInicial, LocalDate dataFinal, UUID idCurso) {
+		List<AvaliacaoDB> avaliacoes = find("select a "
+									      + "  from AvaliacaoDB a "
+										  + " where cast(a.dataCriacao as date) between ?1 and ?2 "
+										  + "   and a.curso.id = ?3 "
+										  + " group by a.descricao ", dataInicial, dataFinal, idCurso)
+										.list();
+
+		return recuperarDescricoes(avaliacoes);
+	}
+
+	private static List<String> recuperarDescricoes(List<AvaliacaoDB> avaliacoes) {
+		return avaliacoes.stream().map(a -> a.getDescricao()).toList();
 	}
 }

@@ -5,5 +5,6 @@ import java.util.List;
 import br.com.relatorio.entities.Resumo;
 
 public interface IEmailService {
-	void enviarEmail(List<Resumo> resumos, List<String> destinatarios);
+	void enviarEmailResumoAvaliacoes(List<Resumo> resumos, List<String> destinatarios);
+	void enviarEmailComentariosFrequentesAvaliacoes(List<String> comentarios, List<String> destinatarios);
 }

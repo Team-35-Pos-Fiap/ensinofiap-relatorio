@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import br.com.relatorio.entities.Resumo;
+import br.com.relatorio.entities.db.AvaliacaoDB;
+import br.com.relatorio.entities.db.CursoDB;
 import br.com.relatorio.entities.db.UsuarioDB;
+import br.com.relatorio.services.interfaces.ICursoService;
 import br.com.relatorio.services.interfaces.IEmailService;
 import br.com.relatorio.services.interfaces.IRelatorioService;
 import br.com.relatorio.services.interfaces.IResumoAvaliacaoService;
@@ -25,9 +28,13 @@ public class RelatorioService implements IRelatorioService {
 	@Inject
 	private IUsuarioService usuarioService;
 	
+	@Inject
+	private ICursoService cursoService;
+	
 	@Override
 	public void gerarRelatorioSemanal() {
-		enviarEmail(buscarResumoAvaliacoes());
+		enviarEmailResumoAvaliacoes();
+		enviarEmailComentariosFrequentes();
 	}
 		
 	private List<Resumo> buscarResumoAvaliacoes() {
@@ -46,13 +53,42 @@ public class RelatorioService implements IRelatorioService {
 		return LocalDate.now();
 	}
 
-	private void enviarEmail(List<Resumo> resumos) {
-		emailService.enviarEmail(resumos, buscarEmailsDestinatarios());
+	private void enviarEmailResumoAvaliacoes() {
+		emailService.enviarEmailResumoAvaliacoes(buscarResumoAvaliacoes(), buscarEmailsDestinatarios());
+	}
+
+	private void enviarEmailComentariosFrequentes() {
+		List<CursoDB> cursos = buscarCursos();
+		List<String> mensagens = recuperaComentarios(cursos);
+		
+		//filtra as avaliações frequentes dentro do período
+		
+		emailService.enviarEmailComentariosFrequentesAvaliacoes(mensagens, buscarEmailsDestinatarios());
 	}
 	
 	private List<String> buscarEmailsDestinatarios() {
 		List<UsuarioDB> usuarios = usuarioService.buscarAdministradores();
 		
 		return usuarios.stream().map(u -> u.getEmail()).collect(Collectors.toList());
+	}
+	
+	private List<CursoDB> buscarCursos() {
+		return cursoService.buscarCursos();
+	}
+	
+	public String recuperarComentario(CursoDB curso) {
+		List<AvaliacaoDB> avaliacoes = curso.getAvaliacoes();
+		
+		String descricaoCurso = "<b>Curso: " + curso.getNome() + "</b>" + System.lineSeparator();
+		
+		String comentarios = avaliacoes.stream()
+									   .map(a -> "  <li>" + a.getDescricao() + "  </li>")
+									   .collect(Collectors.joining("\n", "<ul>\n", "\n</ul>"));		
+		
+		return descricaoCurso + comentarios + System.lineSeparator();
+	}
+	
+	public List<String> recuperaComentarios(List<CursoDB> cursos) {
+		return cursos.stream().map(c -> recuperarComentario(c)).collect(Collectors.toList());
 	}
 }
