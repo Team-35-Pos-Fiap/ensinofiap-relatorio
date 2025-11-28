@@ -2,20 +2,23 @@ package br.com.relatorio.resources;
 
 import br.com.relatorio.services.interfaces.IRelatorioService;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import java.util.List;
+import java.util.ArrayList;
+import br.com.relatorio.services.ResumoAvaliacoesService;
+import br.com.relatorio.services.AvaliacoesFrequentesService;
+import jakarta.enterprise.inject.Instance;
 
-@Path("/relatorio")
+@Path("/ensino/relatorios")
 public class RelatorioResource {
 
 	@Inject
-	private IRelatorioService relatorioService;
+	private Instance<IRelatorioService> relatoriosService;
 	
-    @GET
-    @Path("/semanal")
-    public void gerarRelatorioSemanal() {
-        System.out.println("iniciando o envio dos relatórios.");
-
-    	relatorioService.gerarRelatorio();
+    @POST
+    @Path("/processar")
+    public void processarRelatorios() {
+    	relatoriosService.stream().forEach(IRelatorioService::gerarRelatorio);
     }
 }

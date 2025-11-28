@@ -10,6 +10,8 @@ import br.com.relatorio.services.interfaces.IEmailService;
 import br.com.relatorio.services.interfaces.IRelatorioService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import java.time.LocalDate;
+import java.util.Map;
 
 @RequestScoped
 public class AvaliacoesFrequentesService implements IRelatorioService {
@@ -27,7 +29,7 @@ public class AvaliacoesFrequentesService implements IRelatorioService {
 		<html>
 			<body>
 				<p>Olá administradores,</p>
-				<p>Segue relatório com os avaliações frequentes dos cursos.</p>
+				<p>Segue relatório com as avaliações frequentes dos cursos.</p>
 				<br/>
 				%s	
 			</body>
@@ -39,7 +41,7 @@ public class AvaliacoesFrequentesService implements IRelatorioService {
 		enviarEmailAvaliacoesFrequentes(montarMensagem(recuperaAvaliacoesFrequentes(buscarCursos())));
 	}
 	
-	/*private LocalDate getDataFinal() {
+	private LocalDate getDataFinal() {
 		return getDataAtual().minusDays(1);
 	}
 
@@ -49,12 +51,9 @@ public class AvaliacoesFrequentesService implements IRelatorioService {
 	
 	private LocalDate getDataAtual() {
 		return LocalDate.now();
-	}*/
+	}
 
 	private void enviarEmailAvaliacoesFrequentes(String mensagem) {
-		//filtra as avaliações frequentes dentro do período
-		
-		//emailService.enviarEmail(montaMensagemAvaliacoesFrequentes(recuperaAvaliacoesFrequentes(buscarCursos())), buscarEmailsDestinatarios());
 		emailService.enviarEmail(mensagem, ASSUNTO);
 	}
 	
@@ -67,11 +66,7 @@ public class AvaliacoesFrequentesService implements IRelatorioService {
 	}
 	
 	public String trataAvaliacoes(CursoDB curso) {
-		//List<AvaliacaoDB> avaliacoes = curso.getAvaliacoes();
-		
-		//String descricaoCurso = "<b>Curso: " + curso.getNome() + "</b>" + System.lineSeparator();
-		
-		return montaMensagemDescricaoCurso(curso.getNome()) + montaMensagemDescricaoAvaliacoes(curso.getAvaliacoes()) + System.lineSeparator();
+		return montaMensagemDescricaoCurso(curso.getNome()) + montaMensagemDescricaoAvaliacoes(AvaliacaoDB.buscarAvaliacoesFrequentesPorCurso(getDataInicial(), getDataFinal(), curso.getId())) + System.lineSeparator();
 	}
 	
 	private String montaMensagemAvaliacoesFrequentes(List<String> avaliacoes) {
@@ -83,12 +78,10 @@ public class AvaliacoesFrequentesService implements IRelatorioService {
 	}
 	
 	private String montaMensagemDescricaoCurso(String nome) {
-		return "<b>Curso: " + nome + "</b>" + System.lineSeparator();
+		return "<b>Curso: " + nome + "</b> <br/>" ;
 	}
-	
-	private String montaMensagemDescricaoAvaliacoes(List<AvaliacaoDB> avaliacoes) {
-		return avaliacoes.stream()
-				         .map(a -> "  <li>" + a.getDescricao() + "  </li>")
-				         .collect(Collectors.joining("\n", "<ul>\n", "\n</ul>"));
+
+	private String montaMensagemDescricaoAvaliacoes(List<String> avaliacoes) {
+		return avaliacoes.stream().map(d -> "  <li>" + d + "  </li>").collect(Collectors.joining("\n", "<ul>\n", "</ul>"));
 	}
 }

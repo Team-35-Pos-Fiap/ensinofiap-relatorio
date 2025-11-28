@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +29,7 @@ public class CursoDB extends PanacheEntityBase {
     
 	private String nome;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "curso", fetch = FetchType.LAZY)
 	private List<AvaliacaoDB> avaliacoes;
 	
 	public static List<CursoDB> buscarTodos() {

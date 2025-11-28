@@ -22,7 +22,7 @@ public class ResumoAvaliacoesService implements IRelatorioService {
 	
 	private final String ASSUNTO = "Relatório semanal com o resumo das avaliações.";
 
-	private String resumo = "Curso: %s. Quantidade total de avaliações: %d. Média das avaliações: %.2f. \r\n";
+	private String resumo = "Curso: %s. Quantidade total de avaliações: %d. Média das avaliações: %.2f. <br/><br/>";
 	private String mensagemResumoAvaliacoes = 
 	""" 
 		<html>

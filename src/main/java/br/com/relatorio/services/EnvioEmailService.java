@@ -37,11 +37,7 @@ public class EnvioEmailService implements IEnvioEmailService {
 								 .setSubject(assunto)
 								 .setBodyHtml(mensagem);
 	}
-	
-	/*private List<EmailAddress> recuperarDestinatarios(List<String> destinatarios) {
-		return destinatarios.stream().map(d -> new EmailAddress(d)).collect(Collectors.toList());
-	}*/
-	
+
 	private List<EmailAddress> buscarEmailsDestinatarios() {
 		List<UsuarioDB> usuarios = usuarioService.buscarAdministradores();
 		

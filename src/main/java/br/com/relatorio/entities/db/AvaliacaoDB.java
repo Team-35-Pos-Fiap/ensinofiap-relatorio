@@ -25,7 +25,7 @@ import lombok.ToString;
 @Table(name = "avaliacao")
 @Getter
 @Setter
-@ToString
+@ToString()
 public class AvaliacaoDB extends PanacheEntityBase{
 	@Id
 	private UUID id;
@@ -33,6 +33,7 @@ public class AvaliacaoDB extends PanacheEntityBase{
 	
 	@ManyToOne
 	@JoinColumn(name = "id_curso")
+	@ToString.Exclude
 	private CursoDB curso;
 		
 	@ManyToOne
@@ -58,17 +59,12 @@ public class AvaliacaoDB extends PanacheEntityBase{
 	}
 
 	public static List<String> buscarAvaliacoesFrequentesPorCurso(LocalDate dataInicial, LocalDate dataFinal, UUID idCurso) {
-		List<AvaliacaoDB> avaliacoes = find("select a "
-									      + "  from AvaliacaoDB a "
-										  + " where cast(a.dataCriacao as date) between ?1 and ?2 "
-										  + "   and a.curso.id = ?3 "
-										  + " group by a.descricao ", dataInicial, dataFinal, idCurso)
-										.list();
-
-		return recuperarDescricoes(avaliacoes);
-	}
-
-	private static List<String> recuperarDescricoes(List<AvaliacaoDB> avaliacoes) {
-		return avaliacoes.stream().map(a -> a.getDescricao()).toList();
+		return find("select a.descricao "
+				  + "  from AvaliacaoDB a "
+				  + " where cast(a.dataCriacao as date) between ?1 and ?2 "
+				  + "   and a.curso.id = ?3 "
+				  + " group by a.descricao ", dataInicial, dataFinal, idCurso)
+			   .project(String.class)
+			   .list();
 	}
 }
