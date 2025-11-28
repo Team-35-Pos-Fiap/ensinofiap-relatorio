@@ -15,7 +15,7 @@ public class RelatorioResource {
 	
     //@POST
     //@Path("/processar")
-    @FunctionName("fnc-ensinorelatorio")
+    @FunctionName("fnc-ensinore-latorio")
     public void processarRelatorios(@TimerTrigger(name = "agendamento", schedule = "0 */1 * * * *") String agendamento) {
     	relatoriosService.stream().forEach(IRelatorioService::gerarRelatorio);
     }
