@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 
-@Path("/ensino/relatorios")
+//@Path("/ensino/relatorios")
 public class RelatorioResource {
 
 	@Inject
