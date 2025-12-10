@@ -15,14 +15,14 @@ public class RelatorioResource {
 	@Inject
 	private Instance<IRelatorioService> relatoriosService;
 	
-    //@FunctionName("fnc-ensino-relatorio")
-    //public void processarRelatorios(@TimerTrigger(name = "agendamento", schedule = "0 */1 * * * *") String agendamento) {
-    //	relatoriosService.stream().forEach(IRelatorioService::gerarRelatorio);
-    //}
+    @FunctionName("fnc-relatorio-avaliacoes")
+    public void processarRelatorios(@TimerTrigger(name = "agendamento", schedule = "0 */1 * * * *") String agendamento) {
+    	relatoriosService.stream().forEach(IRelatorioService::gerarRelatorio);
+    }
 
-    @POST
+    /*@POST
     @Path("/processar")
     public void processarRelatorios() {
     	relatoriosService.stream().forEach(IRelatorioService::gerarRelatorio);
-    }
+    }*/
 }
