@@ -28,7 +28,11 @@ public class EnvioEmailService implements IEnvioEmailService {
 	
 	@Override
 	public void enviar(String mensagem, String assunto) {
+		System.out.println("Enviando email... Assunto: " + assunto + " Mensagem: " + mensagem);
+
 		emailClient.beginSend(montarEmail(mensagem, assunto));
+
+		System.out.println("Email enviado com sucesso!");
 	}
 	
 	private EmailMessage montarEmail(String mensagem, String assunto) {
@@ -41,6 +45,7 @@ public class EnvioEmailService implements IEnvioEmailService {
 	private List<EmailAddress> buscarEmailsDestinatarios() {
 		List<UsuarioDB> usuarios = usuarioService.buscarAdministradores();
 		
+		usuarios.stream().forEach(u -> System.out.println("Email destinatario: " + u.getEmail()));
 		return usuarios.stream().map(u -> new EmailAddress(u.getEmail())).collect(Collectors.toList());
 	} 
 }
