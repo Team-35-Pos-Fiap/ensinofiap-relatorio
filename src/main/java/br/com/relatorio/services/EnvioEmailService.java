@@ -20,15 +20,19 @@ public class EnvioEmailService implements IEnvioEmailService {
 	@Inject
 	private IUsuarioService usuarioService;
 	
-	private String connectionString = "endpoint=https://cms-ensino.brazil.communication.azure.com/;accesskey=FeH4iXIV2wZEQbrGSoaKkpLenuQCkTtcpjWATrRcFLtzF7evUaKeJQQJ99BKACULyCp9qFJVAAAAAZCS2Jpc";
+	private String connectionString = "endpoint=https://mail-estudosthiago.brazil.communication.azure.com/;accesskey=1X2X92W9NAvFfloEfzo5QddIc87sckGO0xgcbqUgjd5fF13W9RCeJQQJ99BLACULyCpwSar0AAAAAZCS8g7e";
 
 	private EmailClient emailClient = new EmailClientBuilder().connectionString(connectionString).buildClient();
 
-	private final String REMETENTE = "DoNotReply@5acd0ae5-f401-4bb4-b1ad-b49425ca624f.azurecomm.net";
+	private final String REMETENTE = "DoNotReply@60d624b9-1dac-4fa4-b734-42fb93bffc91.azurecomm.net";
 	
 	@Override
 	public void enviar(String mensagem, String assunto) {
+		System.out.println("Enviando email... Assunto: " + assunto + " Mensagem: " + mensagem);
+
 		emailClient.beginSend(montarEmail(mensagem, assunto));
+
+		System.out.println("Email enviado com sucesso!");
 	}
 	
 	private EmailMessage montarEmail(String mensagem, String assunto) {
@@ -41,6 +45,7 @@ public class EnvioEmailService implements IEnvioEmailService {
 	private List<EmailAddress> buscarEmailsDestinatarios() {
 		List<UsuarioDB> usuarios = usuarioService.buscarAdministradores();
 		
+		usuarios.stream().forEach(u -> System.out.println("Email destinatario: " + u.getEmail()));
 		return usuarios.stream().map(u -> new EmailAddress(u.getEmail())).collect(Collectors.toList());
 	} 
 }

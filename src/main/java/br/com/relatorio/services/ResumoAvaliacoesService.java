@@ -57,6 +57,8 @@ public class ResumoAvaliacoesService implements IRelatorioService {
 	}
 
 	private String montarMensagemResumo(List<Resumo> resumos) {
+		resumos.stream().forEach(r -> System.out.println("dados dos resumos: " + r));
+
 		return String.format(mensagemResumoAvaliacoes, montaListaResumos(resumos));
 	}
 

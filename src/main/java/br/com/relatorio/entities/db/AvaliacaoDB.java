@@ -43,7 +43,7 @@ public class AvaliacaoDB extends PanacheEntityBase{
 	@Column(name = "data_criacao", nullable = false)
 	private LocalDateTime dataCriacao;
 	
-	@Column(name = "is_urgente", nullable = false)
+	@Column(name = "is_urgente")
 	private Boolean isUrgente;
 	
 	private Integer nota;
