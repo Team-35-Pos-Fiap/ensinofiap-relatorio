@@ -16,7 +16,7 @@ public class RelatorioResource {
 	private Instance<IRelatorioService> relatoriosService;
 	
     @FunctionName("fnc-relatorio-avaliacoes")
-    public void processarRelatorios(@TimerTrigger(name = "agendamento", schedule = "0 */1 * * * *") String agendamento) {
+    public void processarRelatorios(@TimerTrigger(name = "agendamento", schedule = "0 * * ? * *") String agendamento) {
     	relatoriosService.stream().forEach(IRelatorioService::gerarRelatorio);
     }
 
