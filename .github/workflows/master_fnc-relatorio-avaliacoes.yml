@@ -64,5 +64,6 @@ jobs:
         with:
           app-name: 'fnc-relatorio-avaliacoes'
           slot-name: 'Production'
-          package: '${{ env.PACKAGE_DIRECTORY }}'
+          package: '*.jar'
           respect-pom-xml: true
+
