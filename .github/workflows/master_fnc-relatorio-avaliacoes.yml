@@ -64,6 +64,7 @@ jobs:
         with:
           app-name: 'fnc-relatorio-avaliacoes'
           slot-name: 'Production'
-          package: '*.jar'
+          package: '.'
           respect-pom-xml: true
+
 
