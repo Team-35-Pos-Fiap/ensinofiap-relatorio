@@ -26,10 +26,6 @@ public class RelatorioResource {
 //    @POST
     @FunctionName("fnc-relatorio-avaliacoes")
     public void processarRelatorios(
-            @HttpTrigger(
-                    name = "req",
-                    methods = {HttpMethod.GET, HttpMethod.POST},
-                    authLevel = AuthorizationLevel.ANONYMOUS)
             @TimerTrigger(name = "agendamento", schedule = "0 */1 * * * *")
             String agendamento, final ExecutionContext execucao,
             final ExecutionContext context) {
