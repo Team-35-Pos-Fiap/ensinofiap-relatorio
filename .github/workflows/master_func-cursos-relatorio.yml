@@ -26,11 +26,7 @@ jobs:
           java-version: 21
 
       - name: 'Restore Project Dependencies Using Mvn'
-        shell: pwsh
-        run:
-          pushd '.'
-          mvn clean package -Dquarkus.package.type=uber-jar
-          popd
+        run: mvn clean package -Dquarkus.package.type=uber-jar
       
       - name: Login to Azure
         uses: azure/login@v2
@@ -46,3 +42,4 @@ jobs:
           app-name: 'func-cursos-relatorio'
           slot-name: 'Production'
           package: .
+
