@@ -32,7 +32,7 @@ jobs:
 
       - name: 'Restore Project Dependencies Using Mvn'
         shell: pwsh
-        run: mvn clean package -Dquarkus.package.type=uber-jar
+        run: mvn clean package -Dquarkus.package.jar.type=uber-jar
       
       - name: Login to Azure
         uses: azure/login@v2
@@ -51,6 +51,7 @@ jobs:
           respect-pom-xml: true
 
           
+
 
 
 
