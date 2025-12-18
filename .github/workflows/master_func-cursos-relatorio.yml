@@ -50,10 +50,11 @@ jobs:
         with:
           app-name: 'func-cursos-relatorio'
           slot-name: 'Production'
-          package: './target/*-runner.jar'
+          package: '${{ env.PACKAGE_DIRECTORY }}'
           respect-pom-xml: true
 
           
+
 
 
 
