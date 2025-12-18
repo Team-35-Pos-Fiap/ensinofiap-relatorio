@@ -33,8 +33,8 @@ jobs:
       - name: 'Restore Project Dependencies Using Mvn'
         shell: pwsh
         run: |
-          pushd './${{ env.PACKAGE_DIRECTORY }}'
-          mvn clean package
+          pushd './target/*-runner.jar'
+          mvn clean package -Dquarkus.package.type=uber-jar
           popd
       
       - name: Login to Azure
@@ -54,4 +54,5 @@ jobs:
           respect-pom-xml: true
 
           
+
 
