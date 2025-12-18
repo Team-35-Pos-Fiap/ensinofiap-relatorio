@@ -1,8 +1,31 @@
 {
-  "version": "2.0",
-  "aggregator": {
-    "batchSize": 1000,
-    "flushTimeout": "00:00:30"
+  "applicationInsights": {
+    "sampling": {
+      "isEnabled": true,
+      "maxTelemetryItemsPerSecond" : 5
+    }
   },
-  "functions": [ "fnc-relatorio-avaliacoes" ]
+  "functions": [ "fnc-relatorio-avaliacoes" ],
+  "http": {
+    "routePrefix": "api",
+    "maxOutstandingRequests": 20,
+    "maxConcurrentRequests": 10,
+    "dynamicThrottlesEnabled": false
+  },
+  "id": "9f4ea53c5136457d883d685e57164f08",
+  "logger": {
+    "categoryFilter": {
+      "defaultLevel": "Information",
+      "categoryLevels": {
+        "Host": "Error",
+        "Function": "Error",
+        "Host.Aggregator": "Information"
+      }
+    }
+  },
+  "tracing": {
+    "consoleLevel": "verbose",
+    "fileLoggingMode": "debugOnly"
+  },
+  "watchDirectories": [ "Shared" ]
 }
