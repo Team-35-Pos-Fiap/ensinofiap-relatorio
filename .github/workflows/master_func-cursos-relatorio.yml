@@ -33,7 +33,7 @@ jobs:
       - name: 'Restore Project Dependencies Using Mvn'
         shell: pwsh
         run: |
-          pushd './target/*-runner.jar'
+          pushd './${{ env.PACKAGE_DIRECTORY }}'
           mvn clean package -Dquarkus.package.type=uber-jar
           popd
       
@@ -50,7 +50,7 @@ jobs:
         with:
           app-name: 'func-cursos-relatorio'
           slot-name: 'Production'
-          package: '${{ env.PACKAGE_DIRECTORY }}'
+          package: '*.jar'
           respect-pom-xml: true
 
           
